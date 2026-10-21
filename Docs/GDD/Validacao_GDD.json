@@ -1,0 +1,26 @@
+{
+  "arquivo": "Docs\\GDD\\GDD_Games_Atualizado.tex",
+  "data_revisao": "2026-10-21",
+  "linhas": 2574,
+  "cinco_niveis_preservados": true,
+  "ambientes_latex_balanceados": true,
+  "chaves_balanceadas": true,
+  "tres_figuras_locais": true,
+  "controle_principal": "F",
+  "compilacao_pdf_realizada": false,
+  "motivo": "Não foi localizado um compilador LaTeX; validação estrutural não substitui compilação.",
+  "fontes": [
+    "Texto LaTeX enviado pelo usuário",
+    "Trabalho_2026-2.pdf (3 páginas)",
+    "Scripts Runtime e relatórios atuais em Docs/Relatorios"
+  ],
+  "fontes_inalteradas": [
+    "GDD_Games.pdf",
+    "Trabalho_2026-2.pdf",
+    "cenas e scripts Unity"
+  ],
+  "ambientes_verificados": 102,
+  "imagens_encontradas": 3,
+  "zip_integro": true,
+  "tabelas_futuras_identificadas_como_metas": true
+}

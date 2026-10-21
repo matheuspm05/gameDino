@@ -1,0 +1,34 @@
+# Unity: arquivos locais e gerados
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Cc]rash[Rr]eports/
+
+# IDEs
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+
+# Backups de recuperacao e ferramentas temporarias locais
+/Docs/Backups/
+/.codex*
+/.merge-recovery-*
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
+.DS_Store

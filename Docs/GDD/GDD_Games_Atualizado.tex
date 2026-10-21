@@ -1,0 +1,2574 @@
+\documentclass[12pt,a4paper]{article}
+
+% =========================================================
+% PACOTES
+% =========================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[brazil]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{setspace}
+\usepackage{float}
+
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+\setstretch{1.15}
+\setlength{\headheight}{15pt}
+
+\definecolor{titulo}{RGB}{45,70,90}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=titulo,
+    urlcolor=titulo
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small Ecos do Cretáceo: Projeto Retorno}
+\fancyhead[R]{\small Game Design Document}
+\fancyfoot[C]{\thepage}
+
+\setlist[itemize]{leftmargin=1.2cm}
+\setlist[enumerate]{leftmargin=1.2cm}
+
+\newcommand{\jogo}{\textbf{Ecos do Cretáceo: Projeto Retorno}}
+
+% =========================================================
+% DOCUMENTO
+% =========================================================
+
+\begin{document}
+
+% =========================================================
+% 1. PÁGINA DE TÍTULO
+% =========================================================
+
+\begin{titlepage}
+    \centering
+
+    \vspace*{2cm}
+
+    {\Huge\bfseries ECOS DO CRETÁCEO\par}
+    \vspace{0.3cm}
+    {\LARGE\bfseries PROJETO RETORNO\par}
+
+    \vspace{0.8cm}
+
+    {\Large Game Design Document -- GDD\par}
+
+    \vspace{1.5cm}
+
+    {\large
+    Um jogo 3D de aventura, exploração, furtividade e sobrevivência
+    sobre um humano sequestrado por uma civilização de dinossauros
+    tecnologicamente avançada.
+    \par}
+
+    \vfill
+
+    \begin{flushleft}
+        \textbf{Disciplina:} Desenvolvimento de Games\\
+        \textbf{Professor:} Saulo Pereira Ribeiro\\
+        \textbf{Curso:} Ciência da Computação\\
+        \textbf{Instituição:} Universidade de Vila Velha\\[0.5cm]
+
+        \textbf{Integrantes:}\\
+        Isabel Sterim Saade\\
+        Maria Carla dos Santos Bellote\\
+        Matheus Pastore Morgan\\
+       
+    \end{flushleft}
+
+    \vfill
+
+    {\large Revisão de 21 de outubro de 2026\par}
+
+    \thispagestyle{empty}
+\end{titlepage}
+
+\addcontentsline{toc}{section}{1. Página de Título}
+
+\tableofcontents
+\clearpage
+
+% Faz a próxima section começar no número 2.
+\setcounter{section}{1}
+
+% =========================================================
+% 2. VISÃO GERAL
+% =========================================================
+
+\section{Visão geral do Jogo}
+
+\subsection*{Estado do documento e da implementação}
+
+Esta revisão, de 21 de outubro de 2026, descreve o \textbf{Nível 1
+já jogável} e o \textbf{planejamento da campanha com cinco níveis}.
+Os níveis 2 a 5, seus personagens, diálogos, combates e eventos
+continuam sendo propostas de design.
+
+A versão atual contém Menu Principal, Nível 1 com progressão completa,
+Menu de Pausa e tela de conclusão. Ainda não existe transição jogável
+para o Nível 2. As cenas da seção narrativa orientam o desenvolvimento
+e não representam conteúdo já encenado no jogo.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{3cm}|X|}
+\hline
+\textbf{Situação} & \textbf{Conteúdo}\\
+\hline
+Implementado & Movimentação, corrida, salto, agachamento, interação F,
+arremesso, bateria, cartão aleatório, três terminais, portas, HUD,
+menus, pet adotável, partículas e áudio disponível.\\
+\hline
+Preparado & Componentes de passos e cantos do pássaro, ainda sem
+AudioClips adequados atribuídos.\\
+\hline
+Planejado & Níveis 2--5, narrativa encenada, inimigos, furtividade,
+combate, vida, checkpoints, salvamento, diálogos e NavMesh.\\
+\hline
+\end{tabularx}
+\end{center}
+
+
+
+\subsection{Público alvo}
+
+O público-alvo de \jogo{} é composto principalmente por adolescentes
+e jovens adultos, aproximadamente entre 14 e 30 anos, interessados em
+jogos de aventura, ficção científica, mistério, exploração e
+sobrevivência.
+
+O jogo não pretende utilizar violência gráfica extrema. O conflito
+será representado principalmente por perseguições, furtividade,
+combate leve e situações de tensão.
+
+A classificação indicativa pretendida é de aproximadamente 12 ou
+14 anos, dependendo da intensidade final das cenas de combate.
+
+\subsection{Conceito do Jogo}
+
+\jogo{} é um jogo 3D em primeira pessoa desenvolvido na Unity.
+
+O jogador controla Alex Moraes, um humano que desperta dentro de uma
+câmara de contenção em uma nave desconhecida sem saber onde está,
+quem o sequestrou ou quanto tempo permaneceu desacordado.
+
+Inicialmente, tudo indica que Alex foi abduzido por uma espécie
+alienígena.
+
+Ao escapar da nave, entretanto, ele descobre que está em um planeta
+distante e que seus sequestradores são, na verdade, descendentes de
+dinossauros que desenvolveram uma civilização tecnologicamente
+avançada.
+
+Ao longo da campanha, Alex descobre que os ancestrais daquela
+civilização deixaram a Terra milhões de anos atrás e que seu atual
+planeta está entrando em colapso.
+
+Uma parte do governo dos dinossauros pretende retornar à Terra,
+mesmo que isso provoque uma guerra contra a humanidade.
+
+Outra parte da população acredita que humanos e dinossauros podem
+coexistir.
+
+O jogador ficará no centro desse conflito.
+
+\subsection{Gênero}
+
+O jogo mistura os seguintes gêneros:
+
+\begin{itemize}
+    \item Aventura 3D;
+    \item Ficção científica;
+    \item Exploração;
+    \item Sobrevivência;
+    \item Furtividade;
+    \item Puzzle;
+    \item Ação leve;
+    \item Narrativa.
+\end{itemize}
+
+A experiência principal será de aventura narrativa, com cada fase
+introduzindo uma forma diferente de jogabilidade.
+
+\subsection{Resumo do fluxo do jogo}
+
+Na versão jogável atual:
+
+\begin{center}
+\textbf{Menu Principal}\\
+$\downarrow$\\
+\textbf{Nível 1 -- A Nave}\\
+$\leftrightarrow$ \textbf{Pausa por ESC}\\
+$\downarrow$\\
+\textbf{Conclusão do Nível 1}\\
+$\downarrow$\\
+\textbf{Menu Principal}
+\end{center}
+
+Para a campanha completa, o planejamento mantém a sequência:
+
+\begin{center}
+Nave $\rightarrow$ Planeta $\rightarrow$ Laboratório\\
+$\rightarrow$ Rebeldes $\rightarrow$ Terra $\rightarrow$ Final.
+\end{center}
+
+O ciclo implementado é explorar, identificar o objetivo, interagir,
+resolver um obstáculo e liberar a próxima área. O HUD, as mensagens
+contextuais, os indicadores e a sinalização orientam esse ciclo.
+
+Diálogos, gravações e eventos narrativos encenados são recursos
+previstos para a campanha, ainda não usados para conduzir a
+progressão do Nível 1.
+
+
+
+\subsection{Aparência e sensação}
+
+O jogo será completamente 3D.
+
+A direção visual combina ficção científica com elementos naturais e
+pré-históricos.
+
+O objetivo é fazer o jogador sentir que inicialmente está explorando
+uma civilização alienígena, evitando revelar imediatamente que ela é
+formada por dinossauros.
+
+A estética da tecnologia utiliza:
+
+\begin{itemize}
+    \item metais escuros;
+    \item luzes artificiais;
+    \item painéis holográficos;
+    \item estruturas circulares;
+    \item símbolos desconhecidos;
+    \item equipamentos de grande escala;
+    \item arquitetura adaptada para criaturas maiores do que humanos.
+\end{itemize}
+
+As fases externas possuem vegetação densa, montanhas, rios, lagos,
+pedras, cavernas e ruínas tecnológicas.
+
+A câmera será em primeira pessoa para aumentar a sensação de
+imersão e também manter o escopo do projeto controlado.
+
+% =========================================================
+% 3. HISTÓRIA, CENÁRIO E PERSONAGEM
+% =========================================================
+
+\section{História, Cenário e Personagem}
+
+Esta seção apresenta o universo e o roteiro da campanha completa.
+A história justifica o ponto de partida da nave, mas suas revelações,
+personagens falantes e cenas posteriores ainda são planejamento.
+
+
+\subsection{História e Narrativa}
+
+\subsubsection*{Contexto}
+
+Milhões de anos antes do surgimento da civilização humana, uma
+pequena parcela de uma espécie inteligente originada dos dinossauros
+desenvolveu tecnologia suficiente para detectar a aproximação de um
+evento catastrófico na Terra.
+
+Quando perceberam que a sobrevivência de sua civilização estava em
+risco, construíram naves e abandonaram o planeta.
+
+Eles encontraram um novo mundo habitável, posteriormente chamado de
+\textit{Kryos}.
+
+Durante milhões de anos, sua civilização se desenvolveu.
+
+Kryos, porém, começou a apresentar um fenômeno desconhecido.
+
+O núcleo do planeta tornou-se instável.
+
+Terremotos, mudanças climáticas e falhas geológicas passaram a
+destruir regiões inteiras.
+
+Os cientistas determinaram que Kryos eventualmente se tornaria
+inabitável.
+
+A descoberta causou uma divisão política e social.
+
+O governo criou o \textbf{Projeto Retorno}.
+
+Seu objetivo era retornar ao planeta de origem: a Terra.
+
+Quando as sondas descobriram que uma nova espécie inteligente havia
+dominado o planeta, o problema tornou-se mais complexo.
+
+Essa espécie era a humanidade.
+
+O governo iniciou secretamente o \textbf{Programa Observador}.
+
+Humanos passaram a ser sequestrados para estudos biológicos,
+comportamentais e ambientais.
+
+O objetivo era descobrir:
+
+\begin{itemize}
+    \item se os dinossauros poderiam sobreviver na Terra moderna;
+    \item quais doenças humanas poderiam afetá-los;
+    \item qual era a capacidade militar humana;
+    \item como humanos reagiriam ao contato com outra civilização;
+    \item se uma possível coexistência seria viável.
+\end{itemize}
+
+Alex Moraes é um dos humanos selecionados.
+
+O jogo começa quando uma falha no sistema da nave interrompe seu
+estado de contenção.
+
+\subsubsection*{Progressão narrativa}
+
+A história é revelada de maneira gradual.
+
+\begin{enumerate}
+    \item Alex acredita ter sido sequestrado por alienígenas.
+    \item Alex consegue escapar de sua câmara.
+    \item Ele percebe que está dentro de uma nave de pesquisa desconhecida.
+    \item Ao sair da nave, descobre que está em outro planeta.
+    \item Ele encontra pegadas gigantes.
+    \item Escuta rugidos e observa grandes sombras.
+    \item Finalmente encontra um dinossauro inteligente.
+    \item Descobre que os dinossauros conhecem a humanidade.
+    \item Descobre que humanos estão sendo estudados.
+    \item Descobre que Kryos está morrendo.
+    \item Descobre a existência do Projeto Retorno.
+    \item Conhece um grupo rebelde.
+    \item Descobre que os ancestrais dos dinossauros vieram da Terra.
+    \item Descobre que parte do governo pretende tomar a Terra pela força.
+    \item Retorna à Terra.
+    \item Tenta impedir uma guerra entre as duas espécies.
+\end{enumerate}
+
+\subsubsection*{Cenas de diálogo principais -- roteiro planejado}
+
+As cenas e falas desta subseção pertencem ao planejamento narrativo.
+A versão atual não possui diálogos ou cutscenes implementados.
+
+
+\paragraph{Cena 1 -- Despertar}
+
+Na implementação atual, o controle começa diretamente na sala de
+contenção; a encenação abaixo permanece prevista para outra etapa.
+
+
+Alex acorda dentro da câmara.
+
+Uma voz automática reproduz uma mensagem incompreensível.
+
+Após alguns segundos, o sistema apresenta uma tradução incompleta:
+
+\begin{quote}
+``Organismo 31... consciência detectada... contenção comprometida.''
+\end{quote}
+
+Alex responde:
+
+\begin{quote}
+``Onde eu estou?''
+\end{quote}
+
+Não há resposta.
+
+\paragraph{Cena 2 -- Primeiro encontro}
+
+Na segunda fase, Alex observa uma criatura caminhando entre árvores.
+
+Inicialmente apenas sua sombra é visível.
+
+A criatura se aproxima.
+
+Alex percebe que se trata de um dinossauro utilizando equipamentos
+tecnológicos.
+
+Alex:
+
+\begin{quote}
+``Isso não é possível.''
+\end{quote}
+
+\paragraph{Cena 3 -- Laboratório}
+
+Alex encontra registros sobre humanos.
+
+Uma transmissão traduzida informa:
+
+\begin{quote}
+``Espécie dominante do planeta de origem confirmada.
+Compatibilidade ambiental: elevada.''
+\end{quote}
+
+Alex percebe que a Terra é o planeta citado.
+
+\paragraph{Cena 4 -- Rebeldes}
+
+A líder rebelde Tala explica:
+
+\begin{quote}
+``Vocês chamam nosso planeta de Terra. Nós o chamávamos de origem.''
+\end{quote}
+
+Nesse momento, Alex compreende que aquela civilização não encontrou a
+Terra recentemente.
+
+Eles nasceram nela.
+
+\paragraph{Cena 5 -- Confronto final}
+
+O comandante Rhaz afirma:
+
+\begin{quote}
+``Kryos está morrendo. Não condenarei nossa espécie por uma civilização
+que surgiu depois de nossa partida.''
+\end{quote}
+
+Alex responde:
+
+\begin{quote}
+``Sobreviver não precisa significar destruir quem já está lá.''
+\end{quote}
+
+% =========================================================
+% LENTE 1
+% =========================================================
+
+\subsubsection*{Lente \#1: Experiência Essencial}
+
+\paragraph{Quais experiências queremos que o jogador tenha?}
+
+O jogador deve experimentar:
+
+\begin{itemize}
+    \item mistério;
+    \item curiosidade;
+    \item sensação de isolamento;
+    \item descoberta;
+    \item medo do desconhecido;
+    \item surpresa;
+    \item perseguição;
+    \item exploração;
+    \item tensão;
+    \item empatia por personagens inicialmente considerados inimigos;
+    \item conflito moral.
+\end{itemize}
+
+A experiência principal é fazer o jogador mudar constantemente sua
+interpretação sobre a situação.
+
+No início, o pensamento esperado é:
+
+\begin{quote}
+``Fui sequestrado por alienígenas e preciso fugir.''
+\end{quote}
+
+Mais tarde:
+
+\begin{quote}
+``Os alienígenas são dinossauros.''
+\end{quote}
+
+Depois:
+
+\begin{quote}
+``Eles conhecem a Terra.''
+\end{quote}
+
+Em seguida:
+
+\begin{quote}
+``Eles vieram da Terra.''
+\end{quote}
+
+E finalmente:
+
+\begin{quote}
+``Nem todos são meus inimigos.''
+\end{quote}
+
+\paragraph{O que é essencial para essa experiência?}
+
+São considerados eventos essenciais:
+
+\begin{enumerate}
+    \item Despertar sem explicações.
+    \item Explorar a nave.
+    \item Observar criaturas sem enxergá-las completamente.
+    \item Escapar da nave.
+    \item Descobrir o planeta.
+    \item Encontrar as primeiras pegadas.
+    \item Encontrar o primeiro dinossauro.
+    \item Ser levado ao laboratório.
+    \item Encontrar registros de humanos.
+    \item Descobrir o Projeto Retorno.
+    \item Sofrer uma queda durante a tentativa de fuga.
+    \item Conhecer os rebeldes.
+    \item Descobrir a origem terrestre dos dinossauros.
+    \item Retornar para a Terra.
+    \item Impedir o conflito total.
+\end{enumerate}
+
+\paragraph{Como o jogo captura essa essência?}
+
+O mistério será representado pela ausência proposital de informações
+no início.
+
+O jogo evita grandes explicações nas primeiras fases.
+
+O jogador encontra pequenos fragmentos de informação através de
+cenários, gravações, computadores e diálogos.
+
+As revelações são apresentadas principalmente como consequência da
+exploração, e não apenas através de textos.
+
+Pegadas, ruídos, sombras, equipamentos e arquitetura funcionam como
+pistas visuais.
+
+% =========================================================
+% LENTE 2
+% =========================================================
+
+\subsubsection*{Lente \#2: Surpresa}
+
+Os principais momentos de surpresa serão:
+
+\begin{enumerate}
+    \item A descoberta de que Alex não está na Terra.
+    \item As primeiras pegadas gigantes.
+    \item O primeiro dinossauro inteligente.
+    \item A descoberta de humanos presos no laboratório.
+    \item A descoberta de que os dinossauros conhecem a Terra.
+    \item A revelação de que Kryos está morrendo.
+    \item O encontro com dinossauros amigáveis.
+    \item A revelação de que os ancestrais dos dinossauros vieram da Terra.
+    \item A descoberta de que a invasão ainda pode ser evitada.
+\end{enumerate}
+
+As regras também permitem pequenas surpresas dinâmicas.
+
+Por exemplo:
+
+\begin{itemize}
+    \item portas podem liberar novos caminhos;
+    \item inimigos podem alterar suas rotas;
+    \item alarmes podem modificar o comportamento dos NPCs;
+    \item algumas salas são opcionais;
+    \item documentos opcionais revelam informações extras;
+    \item determinados acontecimentos podem ser vistos apenas por jogadores
+    que explorarem determinadas áreas.
+\end{itemize}
+
+% =========================================================
+% 3.2 MUNDO
+% =========================================================
+
+\subsection{Mundo do Jogo}
+
+\subsubsection{Visual geral e sensação do mundo}
+
+O mundo mistura elementos pré-históricos e futuristas.
+
+A direção narrativa da campanha prevê que a tecnologia dos dinossauros
+pareça desconhecida ao humano. O Nível 1 atual utiliza kits sci-fi
+modulares e escala transitável por um personagem humano.
+
+As construções possuem:
+
+\begin{itemize}
+    \item portas grandes;
+    \item corredores amplos;
+    \item terminais elevados;
+    \item plataformas;
+    \item grandes estruturas metálicas;
+    \item iluminação artificial;
+    \item símbolos próprios;
+    \item hologramas;
+    \item estruturas adaptadas para diferentes espécies.
+\end{itemize}
+
+O planeta Kryos possui grandes regiões naturais preservadas.
+
+Isso cria contraste entre tecnologia extremamente avançada e natureza
+selvagem.
+
+\subsubsection{Áreas do mundo}
+
+\paragraph{Nave de Pesquisa}
+
+Utilizada na Fase 1.
+
+É uma nave de pesquisa responsável pelo transporte de indivíduos
+capturados e equipamentos científicos. O cenário jogável atual tem
+porte médio e nove setores, com circulação em primeira pessoa.
+
+Possui:
+
+\begin{itemize}
+    \item câmaras de contenção;
+    \item corredores;
+    \item laboratório;
+    \item depósitos;
+    \item sala de energia;
+    \item centro de segurança;
+    \item hangares.
+\end{itemize}
+
+\paragraph{Vale de Kryos}
+
+Utilizado na Fase 2.
+
+É uma região natural próxima da nave.
+
+Possui:
+
+\begin{itemize}
+    \item florestas;
+    \item rios;
+    \item morros;
+    \item vales;
+    \item pedras;
+    \item areia;
+    \item cascalho;
+    \item cavernas;
+    \item ruínas;
+    \item estruturas tecnológicas.
+\end{itemize}
+
+\paragraph{Complexo de Pesquisa}
+
+Utilizado na Fase 3.
+
+É o local onde espécies terrestres são estudadas.
+
+Possui:
+
+\begin{itemize}
+    \item laboratórios;
+    \item celas;
+    \item corredores;
+    \item câmeras;
+    \item salas de controle;
+    \item áreas médicas;
+    \item centros de contenção.
+\end{itemize}
+
+\paragraph{Território Rebelde}
+
+Utilizado na Fase 4.
+
+É uma região distante das grandes cidades.
+
+Possui:
+
+\begin{itemize}
+    \item florestas;
+    \item cânions;
+    \item destroços;
+    \item acampamentos;
+    \item cavernas;
+    \item equipamentos improvisados;
+    \item antiga instalação de comunicação.
+\end{itemize}
+
+\paragraph{Terra}
+
+Utilizada na Fase 5.
+
+O jogador retorna a uma região urbana da Terra.
+
+A área foi parcialmente evacuada devido à chegada das primeiras naves.
+
+Possui:
+
+\begin{itemize}
+    \item ruas;
+    \item casas;
+    \item prédios;
+    \item veículos;
+    \item barricadas;
+    \item destroços;
+    \item postos militares;
+    \item estruturas de comunicação.
+\end{itemize}
+
+% =========================================================
+% 3.3 PERSONAGENS
+% =========================================================
+
+\subsection{Personagens}
+
+\subsubsection*{Alex Moraes}
+
+\textbf{Espécie:} Humano.
+
+\textbf{Idade:} 28 anos.
+
+\textbf{História:}
+
+Alex trabalhava como técnico de manutenção eletrônica antes de ser
+capturado.
+
+Essa profissão justifica sua capacidade de interagir com máquinas,
+circuitos e terminais durante o jogo.
+
+\textbf{Personalidade:}
+
+\begin{itemize}
+    \item curioso;
+    \item observador;
+    \item desconfiado;
+    \item persistente;
+    \item inicialmente impulsivo;
+    \item progressivamente mais empático.
+\end{itemize}
+
+\textbf{Aparência:}
+
+Roupa simples modificada durante o período de contenção.
+Posteriormente utiliza equipamentos encontrados em Kryos.
+
+\textbf{Situação atual:} o personagem é controlado em primeira pessoa.
+
+Caminhar, correr, saltar e agachar são ações funcionais, mas não há
+modelo humano com todos os estados animados comprovados.
+
+\textbf{Animações planejadas para o protagonista:}
+
+\begin{itemize}
+    \item parado;
+    \item queda;
+    \item caminhada;
+    \item corrida;
+    \item salto;
+    \item interação;
+    \item dano;
+    \item morte.
+\end{itemize}
+
+A representação futura poderá utilizar braços ou um modelo humano.
+Movimentar a câmera ou animar o pet não é tratado como comprovação
+automática dos estados de animação exigidos para o personagem.
+
+\textbf{Habilidades:}
+
+\begin{itemize}
+    \item correr;
+    \item saltar;
+    \item agachar;
+    \item interagir;
+    \item utilizar terminais;
+    \item carregar objetos pequenos;
+    \item utilizar equipamentos;
+    \item usar arma simples nas fases finais.
+\end{itemize}
+
+\textbf{Relevância:}
+
+Protagonista e ponto de vista principal da narrativa.
+
+% ---------------------------------------------------------
+
+\subsubsection*{Tala}
+
+\textbf{Espécie:} Descendente inteligente de ceratopsídeos.
+
+\textbf{Função:} Líder de uma célula rebelde.
+
+\textbf{Personalidade:}
+
+\begin{itemize}
+    \item racional;
+    \item paciente;
+    \item protetora;
+    \item desconfiada do governo;
+    \item favorável à coexistência.
+\end{itemize}
+
+\textbf{Aparência:}
+
+Possui equipamentos improvisados, proteção corporal e acessórios
+tecnológicos reutilizados.
+
+\textbf{Animações previstas:}
+
+\begin{itemize}
+    \item idle;
+    \item andar;
+    \item correr;
+    \item conversar;
+    \item apontar;
+    \item atacar;
+\end{itemize}
+
+\textbf{Habilidades:}
+
+Conhecimento do planeta, liderança e combate.
+
+\textbf{Relevância:}
+
+É responsável por explicar a verdadeira história da civilização de
+Kryos.
+
+\textbf{Relacionamento com Alex:}
+
+Inicialmente desconfia do protagonista, mas passa a considerá-lo uma
+possível ligação entre as duas espécies.
+
+% ---------------------------------------------------------
+
+\subsubsection*{General Rhaz}
+
+\textbf{Espécie:} Descendente de grande terópode.
+
+\textbf{Função:} Comandante responsável pelo Projeto Retorno.
+
+\textbf{Personalidade:}
+
+\begin{itemize}
+    \item autoritário;
+    \item disciplinado;
+    \item pragmático;
+    \item extremamente focado na sobrevivência de sua espécie.
+\end{itemize}
+
+Rhaz não considera a destruição dos humanos seu objetivo principal.
+
+Para ele, uma possível guerra é uma consequência aceitável caso seja
+necessária para salvar seu povo.
+
+\textbf{Aparência:}
+
+Grande porte, armadura tecnológica e dispositivos de comunicação.
+
+\textbf{Relevância:}
+
+Principal antagonista da campanha.
+
+% ---------------------------------------------------------
+
+\subsubsection*{Dra. Veyra}
+
+\textbf{Espécie:} Descendente de pequeno terópode.
+
+\textbf{Função:} Cientista responsável pelo estudo de humanos.
+
+\textbf{Personalidade:}
+
+\begin{itemize}
+    \item lógica;
+    \item curiosa;
+    \item fria;
+    \item cientificamente interessada nos humanos;
+    \item gradualmente questiona as ordens recebidas.
+\end{itemize}
+
+\textbf{Relevância:}
+
+É responsável por parte dos registros que permitem ao jogador
+compreender o Programa Observador.
+
+% =========================================================
+% 4. JOGABILIDADE
+% =========================================================
+
+\subsubsection*{Sparrow -- Companheiro opcional}
+
+\textbf{Representação:} pequeno pássaro do pacote Sparrow --
+Quirky Series, da Omabuarts Studio.
+
+\textbf{Função atual:} encontro opcional depois da primeira porta.
+Permanece no chão até o jogador fazer amizade com F e, então,
+acompanha o protagonista em voo.
+
+\textbf{Personalidade visual:} repouso variado, pequenos movimentos
+corporais do próprio pacote e voo suave. Não possui falas,
+combate, coleta de itens ou participação obrigatória nos puzzles.
+
+\textbf{Animações utilizadas:} Idle\_A, Idle\_B, Idle\_C e Fly.
+
+\textbf{Áudio:} componente de cantos ocasionais preparado, sem clipes
+adequados atribuídos na versão atual.
+
+\textbf{Persistência:} adoção somente durante a partida; reiniciar
+faz o pássaro voltar ao ponto de espera.
+
+
+\section{Jogabilidade e Mecânicas}
+
+\subsection{Jogabilidade / Gameplay}
+
+\subsubsection{Objetivos}
+
+O objetivo geral é sobreviver, compreender o motivo do sequestro e
+retornar à Terra.
+
+Os objetivos mudam conforme a fase.
+
+\begin{enumerate}
+    \item Escapar da nave.
+    \item Explorar o planeta e encontrar abrigo.
+    \item Escapar do laboratório.
+    \item Ajudar os rebeldes e conseguir uma forma de retornar.
+    \item Impedir o início de uma guerra na Terra.
+\end{enumerate}
+
+\subsubsection{Progressão do Jogo}
+
+A campanha planejada possui cinco fases principais; somente a primeira
+está implementada na versão atual.
+
+Cada fase introduz ou destaca uma mecânica.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|c|X|X|}
+\hline
+\textbf{Fase} & \textbf{Ambiente} & \textbf{Gameplay principal}\\
+\hline
+1 & Nave & Exploração, arremesso e puzzles\\
+\hline
+2 & Planeta & Exploração e sobrevivência\\
+\hline
+3 & Laboratório & Furtividade\\
+\hline
+4 & Território Rebelde & Exploração e fuga\\
+\hline
+5 & Terra & Ação e objetivo narrativo\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsubsection{Estrutura da Missão/Desafio}
+
+O caminho obrigatório implementado no Nível 1 é:
+
+\begin{enumerate}
+\item Pegar uma caixa na sala de contenção.
+\item Arremessar a caixa contra o alvo acima da porta inicial.
+\item Encontrar a bateria em Máquinas/Carga, acessível pelo lado
+esquerdo do depósito.
+\item Instalar a bateria no painel da sala de energia.
+\item Entrar no laboratório desbloqueado e encontrar o cartão.
+\item Usar o cartão no leitor da segurança para liberar o hangar.
+\item Ativar os três terminais do hangar, em qualquer ordem.
+\item Atravessar a saída iluminada para concluir o nível.
+\end{enumerate}
+
+Adotar o Sparrow é uma atividade opcional depois da primeira porta
+e não bloqueia a progressão.
+
+\subsubsection{Estrutura dos Enigmas}
+
+Os desafios utilizam exploração, observação e interação simples.
+Não há senhas, ordem secreta de terminais ou minigames na versão atual.
+
+\paragraph{Impacto} Pegar a caixa com F e lançá-la com o botão esquerdo
+do mouse contra o alvo físico acima da porta. Erros permitem novas tentativas.
+
+\paragraph{Energia} Coletar a bateria e instalá-la no painel. A energia
+restaurada libera o laboratório.
+
+\paragraph{Acesso} Encontrar o único cartão, sorteado entre três pontos
+válidos do laboratório, e utilizá-lo no leitor da segurança.
+
+\paragraph{Três sistemas} Ativar uma vez cada terminal do hangar.
+A ordem é livre. Somente o conjunto completo libera a saída externa.
+
+
+
+\subsubsection{Fluxo do jogo}
+
+O fluxo geral é:
+
+\begin{center}
+Exploração
+$\rightarrow$
+Objetivo
+$\rightarrow$
+Obstáculo
+$\rightarrow$
+Interação/Puzzle
+$\rightarrow$
+Recompensa
+$\rightarrow$
+Nova área.
+\end{center}
+
+Na campanha planejada, as recompensas poderão incluir os itens abaixo.
+No Nível 1 atual, a recompensa funcional é principalmente o acesso
+à próxima área e a atualização do objetivo; checkpoints e documentos
+narrativos ainda não estão implementados.
+
+Possibilidades da campanha:
+
+\begin{itemize}
+    \item acesso a uma nova região;
+    \item informação narrativa;
+    \item equipamento;
+    \item checkpoint;
+    \item novo objetivo.
+\end{itemize}
+
+% =========================================================
+% MECÂNICAS
+% =========================================================
+
+\subsection{Mecânicas}
+
+\subsubsection{Física e colisões}
+
+O jogador usa o \texttt{CharacterController} existente, gravidade e
+colisão com o cenário. Não utiliza Rigidbody para a movimentação.
+
+As caixas arremessadas usam Rigidbody, impulso com \texttt{AddForce},
+torque com \texttt{AddTorque} e detecção contínua de colisão. A direção
+do lançamento acompanha a câmera.
+
+Pisos, paredes, tetos, portas fechadas e equipamentos sólidos possuem
+colisores adequados à geometria. São priorizados BoxColliders e
+composições simples. Mesas usam tampo e pés; marcos de portas usam
+laterais e verga. Cabos baixos não se tornam barreiras desnecessárias.
+
+Cada porta de progressão desloca sua folha por \texttt{Translate}.
+O collider sólido acompanha a folha e libera o vão ao abrir.
+Triggers de interação e conclusão são separados da colisão física.
+
+\subsubsection{Movimento no jogo}
+
+\begin{itemize}
+\item WASD: andar.
+\item Mouse: olhar ao redor, com limite vertical.
+\item Shift esquerdo: correr.
+\item Espaço: saltar.
+\item Ctrl esquerdo ou direito, mantido pressionado: agachar.
+\end{itemize}
+
+O agachamento reduz a cápsula e a altura da câmera sem deslocar os
+pés. O jogador só fica em pé quando há espaço acima. Não há stamina.
+
+\subsubsection{Interação em primeira pessoa}
+
+\texttt{PlayerInteraction} utiliza Raycast a partir da câmera, com
+alcance máximo de aproximadamente 3 metros. A tecla principal é
+\textbf{F}. A mensagem contextual aparece na parte inferior da tela.
+
+Obstáculos sólidos interrompem a busca. Não se coletam itens ou se
+acionam painéis através de paredes ou portas fechadas.
+\texttt{IInteractable} é o contrato compartilhado pelos interativos
+e pela adoção do Sparrow. A tecla E não é utilizada nesta versão.
+
+Interações e lançamentos são bloqueados na pausa e após a conclusão.
+
+\subsubsection{Arremesso e spawn de caixas}
+
+A caixa inicial fica no chão da contenção. Após F, uma instância
+aparece no \texttt{HoldPoint}, filho da câmera, abaixo e ao lado da
+mira. Enquanto segura, não colide com o jogador nem intercepta seus
+Raycasts.
+
+O botão esquerdo lança uma caixa física. A função de spawn usa
+\texttt{Instantiate} para criar automaticamente outra na mão.
+Um array contém dois prefabs locais de caixas baseados em modelos
+reais, selecionados com \texttt{Random.Range}.
+
+Os parâmetros atuais são impulso 11, torque 0,08, intervalo mínimo
+de 0,45 segundo, duração de 12 segundos e limite de oito projéteis
+ativos. São configuráveis no Inspector.
+
+Somente uma caixa efetivamente lançada pelo sistema ativa o alvo.
+O acerto abre a primeira porta, confirma visualmente o sucesso,
+remove as caixas e interrompe a geração de reposições.
+
+\subsubsection{Itens e estado dos puzzles}
+
+Bateria e cartão são itens-chave registrados por estado, sem
+inventário visual complexo. A coleta remove o item do cenário.
+A bateria instalada aparece no encaixe do painel.
+
+O cartão reutiliza o modelo ARCADIA, com \texttt{Arcadia\_Verso}
+no verso. Há somente um cartão ativo. No início de cada partida,
+é sorteado em execução entre três pontos apoiados em mesas reais
+do laboratório. São verificados limites, apoio e espaço livre.
+
+\texttt{Level01GameManager} é a única fonte de verdade para energia,
+cartão, terminais e conclusão, evitando estados conflitantes.
+
+\subsubsection{Passarinho companheiro}
+
+O Sparrow é opcional. Começa no chão de um ponto visível do corredor
+logo depois da primeira porta, sem acompanhar o jogador.
+
+Ao mirar nele e pressionar F, aparece a mensagem
+\emph{Novo companheiro encontrado!}. A adoção é registrada apenas na
+partida. O alvo de interação é desativado e o pássaro decola para
+seguir suavemente ao lado do protagonista.
+
+O movimento usa interpolação, varreduras contra obstáculos e uma
+trilha curta do jogador. Se necessário, a recuperação ocorre de
+forma oculta em posição segura fora da vista frontal. Não usa NavMesh.
+
+Após a adoção, o pet não tem colisão física ativa, não bloqueia
+Raycasts, não aciona puzzles ou conclusão e não interfere nas caixas.
+Pausa com ESC e volta a esperar ao reiniciar.
+
+\subsubsection{Combate e furtividade}
+
+Não há combate, inimigos, dano, vida, drone ou furtividade funcional
+no Nível 1 atual. Câmeras de vigilância são decorativas.
+
+A campanha prevê furtividade no Nível 3 e ação simples nas etapas
+finais. São sistemas futuros, ainda não implementados.
+
+\subsubsection{Economia}
+
+Não há dinheiro, comércio ou loja. A progressão depende de itens-chave,
+ações concluídas e acesso a novas áreas.
+
+\subsubsection{Fluxo de telas atual}
+
+\begin{center}
+\textbf{MainMenu: Novo Jogo / Controles / Sair}\\[0.2cm]
+$\downarrow$\\[0.2cm]
+\textbf{Level01\_Nave\_Expanded}\\[0.2cm]
+$\leftrightarrow$ \textbf{Pausa por ESC}\\[0.2cm]
+$\downarrow$\\[0.2cm]
+\textbf{NÍVEL 1 CONCLUÍDO}\\[0.2cm]
+$\downarrow$\\[0.2cm]
+\textbf{Voltar ao Menu Principal}
+\end{center}
+
+A campanha completa mantém cinco níveis planejados e um final
+narrativo. Essa sequência ainda não é jogável na versão atual.
+
+\subsection{Opções do jogo}
+
+O menu oferece a consulta dos controles. Não há tela de ajustes de
+volume, sensibilidade, resolução ou qualidade gráfica. A equipe
+pode editar parâmetros no Inspector.
+
+\subsection{Rejogabilidade e salvamento}
+
+Não há save, carregamento de progresso ou checkpoints. Novo Jogo e
+Reiniciar Nível recarregam a cena e zeram os estados.
+
+A porta inicial fecha, caixas antigas desaparecem, bateria retorna,
+cartão é sorteado novamente, terminais são resetados, saída e luz
+voltam ao início, e o Sparrow espera sem adoção.
+
+O sorteio do cartão e as variações de idle acrescentam pequena
+variedade sem alterar a solução principal.
+
+\subsection{Exploração opcional e Easter Eggs}
+
+Explorar salas auxiliares e adotar o Sparrow são atividades opcionais.
+Não há sala secreta, senha especial, documento coletável ou Easter Egg
+funcional declarado como implementado. Referências adicionais poderão
+ser incluídas depois, sem complicar o percurso obrigatório.
+
+
+
+\section{Níveis}
+
+\subsection{Nível 1 -- A Nave}
+
+\subsubsection*{Sinopse e estado atual}
+
+Alex inicia na sala de contenção de uma nave de pesquisa desconhecida.
+A arquitetura e os equipamentos sugerem uma origem alienígena.
+O jogador precisa liberar sua primeira passagem, restaurar energia
+e abrir a saída externa do hangar.
+
+A fase está jogável do início ao fim. O controle é entregue
+diretamente na contenção, com o objetivo de pegar uma caixa.
+Não há cutscene de despertar, abertura animada de cápsula,
+voz de apresentação ou inimigo nesta versão.
+
+A nave é de tamanho médio, modular e explorável. O objetivo é
+oferecer ambientes distintos e caminhos legíveis, sem alongar
+artificialmente o percurso. Uma duração futura de 5 a 10 minutos
+é uma intenção de design, não uma medição validada da partida atual.
+
+\subsubsection*{Setores e função}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{3.5cm}|X|}
+\hline
+\textbf{Setor} & \textbf{Função na versão atual}\\
+\hline
+01 -- Contenção & Spawn, caixa inicial, alvo de impacto e primeira porta bloqueada.\\
+\hline
+02 -- Corredores & Conexão entre setores, sinalização e Sparrow esperando depois da primeira porta.\\
+\hline
+03 -- Energia & Painel acessível desde o início; instalação da bateria libera o laboratório.\\
+\hline
+04 -- Depósito & Armazenamento e acesso ao desvio de Máquinas/Carga.\\
+\hline
+05 -- Laboratório & Porta dependente da energia; três locais possíveis para o único cartão.\\
+\hline
+06 -- Segurança & Leitor do cartão que autoriza o acesso ao hangar.\\
+\hline
+07 -- Hangar & Três terminais, portão externo, luz branca e região de conclusão.\\
+\hline
+08 -- Máquinas/Carga & Ambiente industrial à esquerda do depósito, onde fica a bateria.\\
+\hline
+09 -- Manutenção & Sala auxiliar para exploração opcional.\\
+\hline
+\end{tabularx}
+\end{center}
+
+Os corredores conectam os setores. Visitar energia antes de possuir
+a bateria é permitido, mas não resolve o puzzle. A bateria é acessível
+antes da restauração; o cartão está no laboratório, cuja abertura
+depende somente da bateria. Não há dependência circular.
+
+\subsubsection*{Objetivos apresentados pelo HUD}
+
+\begin{enumerate}
+\item Pegue uma caixa na sala inicial.
+\item Acerte o botão acima da porta com a caixa.
+\item Encontre uma bateria na nave.
+\item Instale a bateria na sala de energia.
+\item Entre no laboratório.
+\item Encontre o cartão de segurança.
+\item Utilize o cartão no leitor da segurança.
+\item Ative os três terminais do hangar, com contador de 0/3 a 3/3.
+\item Atravesse a saída para escapar da nave.
+\end{enumerate}
+
+A adoção não substitui o objetivo principal. A confirmação do
+companheiro é uma mensagem temporária.
+
+\subsubsection*{Desafio inicial -- Impacto acima da porta}
+
+A porta da contenção começa fechada e sólida. O alvo fica acima dela,
+visível da sala. Uma caixa pequena permite iniciar o desafio com F.
+
+O jogador arremessa com o mouse esquerdo, observando a direção e a
+gravidade. Após cada lançamento, uma nova caixa aparece na mão.
+Um intervalo curto e o limite de projéteis evitam acúmulo excessivo.
+
+Um impacto válido da caixa lançada muda o indicador do alvo e abre
+a porta. Contato do personagem, do pet ou de decoração não é aceito.
+Após o sucesso, o sistema interrompe o spawn e remove as caixas.
+
+\subsubsection*{Exploração opcional -- Adoção do Sparrow}
+
+Depois da porta inicial, o jogador encontra o Sparrow no chão do
+corredor, próximo à lateral e fora da passagem principal. Ele utiliza
+os idles reais do pacote enquanto espera.
+
+A mensagem é \textbf{[F] Fazer amizade com o passarinho}. Ao adotar,
+o pet passa a acompanhar o jogador em voo. A adoção pode ser ignorada
+e não fornece bateria, cartão ou vantagem obrigatória nos puzzles.
+
+\subsubsection*{Puzzle 1 -- Bateria e energia}
+
+A bateria utiliza uma célula real do pacote \textit{Energy Cells Free}.
+Fica em Máquinas/Carga, no desvio à esquerda do depósito.
+
+Ao coletar com F, desaparece do cenário, o estado de posse é
+registrado e aparece \emph{Bateria coletada!}. O objetivo passa a
+indicar a instalação na sala de energia.
+
+O painel sem bateria informa \emph{Bateria necessária}. Com o item,
+F o instala, mostra a bateria no encaixe, ativa o indicador, reproduz
+a confirmação sonora e o VFX ciano. A porta do laboratório abre.
+
+\subsubsection*{Puzzle 2 -- Cartão de segurança}
+
+Dentro do laboratório há um cartão ARCADIA. Sua posição é sorteada
+entre três marcadores válidos sobre mesas, em cada início ou reinício.
+O modelo não é duplicado.
+
+O jogador mira e pressiona F. O cartão desaparece, a posse é
+registrada e o HUD orienta a ida ao leitor da segurança.
+
+Sem cartão, o leitor informa \emph{Cartão de acesso necessário}.
+Com o cartão, a interação autoriza o acesso e abre a porta do hangar.
+Não existe minigame de autenticação.
+
+\subsubsection*{Puzzle 3 -- Sistemas do hangar}
+
+Os três terminais representam:
+
+\begin{enumerate}
+\item Sistema de energia auxiliar.
+\item Sistema de segurança.
+\item Controle da saída externa.
+\end{enumerate}
+
+Cada terminal é ativado uma vez com F e muda seu indicador.
+A ordem é livre; não existe senha ou sequência de botões.
+O HUD apresenta o progresso de 0/3 até 3/3.
+
+Com os três ativos, o portão externo abre, o vapor é emitido e um
+alerta eletrônico toca por quatro segundos. A luz branca fica
+visível atrás do portão. Repetir uma solicitação não duplica o alerta.
+
+\subsubsection*{Estados das portas}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{3.3cm}|X|}
+\hline
+\textbf{Porta inicialmente fechada} & \textbf{Condição de abertura}\\
+\hline
+Contenção & Impacto válido de caixa lançada no alvo.\\
+\hline
+Laboratório & Bateria instalada e energia restaurada.\\
+\hline
+Entrada do hangar & Cartão utilizado no leitor da segurança.\\
+\hline
+Saída externa & Três terminais do hangar ativados.\\
+\hline
+\end{tabularx}
+\end{center}
+
+Todas bloqueiam fisicamente quando fechadas. A colisão acompanha a
+folha móvel ao abrir.
+
+\subsubsection*{Conclusão}
+
+Abrir o portão não conclui sozinho a fase. O jogador deve caminhar
+até a luz branca e entrar no volume de saída.
+
+O trigger identifica somente a cápsula do jogador, verifica sua
+presença no volume e solicita a conclusão ao gerente. São exigidos
+os três terminais e a liberação do portão. Caixas e pássaro não contam.
+
+A tela apresenta:
+
+\begin{center}
+\textbf{NÍVEL 1 CONCLUÍDO}\\[0.15cm]
+Você conseguiu escapar da nave.\\[0.15cm]
+\textbf{Voltar ao Menu Principal}
+\end{center}
+
+O jogo congela, libera o cursor e permite voltar ao menu.
+Não carrega automaticamente o Nível 2 nem mostra um planeta
+explorável ou a revelação dos dinossauros.
+
+\subsubsection*{Apresentação audiovisual}
+
+A nave combina iluminação fria, painéis, computadores, caixas,
+tubulações e equipamentos industriais. Os setores mantêm identidade
+própria sem prejudicar a circulação.
+
+As quatro portas importantes usam som mecânico 3D e pequenas
+descargas de vapor. A bateria instalada ativa faíscas ciano.
+Os efeitos são curtos, sem loop e sem colisores.
+
+O áudio de ambiente é discreto na energia. Passos e cantos do
+Sparrow têm componentes preparados, mas ainda não possuem clipes
+adequados atribuídos. Não são declarados como sons audíveis atuais.
+
+\subsubsection*{Assets e comprovação da variedade}
+
+O inventário formal da expansão registra \textbf{82 modelos visuais
+distintos em 1005 instâncias de cenário}. Esse é o catálogo-base
+auditado, anterior aos últimos acréscimos de gameplay e polimento,
+e não uma nova contagem total da cena atual.
+
+O critério agrupa geometrias equivalentes: repetir prefab, trocar
+material, mudar escala ou rotação não cria um novo modelo.
+UI, materiais, áudios, objetos vazios e repetições não aumentam
+o total de modelos visuais.
+
+A distribuição do catálogo-base é:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|r|}
+\hline
+\textbf{Categoria} & \textbf{Modelos distintos}\\
+\hline
+Armazenamento & 20\\
+Arquitetura & 21\\
+Científico & 2\\
+Computadores & 5\\
+Estruturas industriais & 6\\
+Iluminação & 5\\
+Industrial & 14\\
+Mobiliário & 6\\
+Portas & 2\\
+Segurança & 1\\
+\hline
+\textbf{Total da base auditada} & \textbf{82}\\
+\hline
+\end{tabularx}
+\end{center}
+
+As origens, setores e quantidades estão no relatório
+\texttt{Docs/Relatorios/Nivel01\_Expandido/Level01\_Expanded\_Assets.md}
+e nos CSV/JSON correspondentes. A contagem final deve ser
+regenerada a partir da cena entregue, sem somar estimativas
+aos modelos comprovados.
+
+Pacotes utilizados na nave incluem Barking Dog -- 3D Free Modular
+Kit, Modular SciFi MegaKit, Free Sci-Fi Office Pack, Low Poly
+Storage Pack e Surveillance Camera. Os itens usam Energy Cells
+Free e o cartão ARCADIA já existente. O companheiro utiliza
+Sparrow -- Quirky Series, da Omabuarts Studio.
+
+\subsubsection*{Limites desta entrega}
+
+Não estão implementados drone, inimigos, perseguição, combate,
+vida, inventário complexo, save, checkpoints, diálogos,
+cutscenes, abertura encenada da cápsula ou transição para outro nível.
+As câmeras são decorativas. Esses elementos não são necessários
+para resolver os puzzles atuais.
+
+
+
+\subsection{Nível 2 -- O Planeta}
+
+\textbf{Status: planejado, não implementado na versão atual.}
+
+
+\subsubsection*{Sinopse}
+
+Alex deixa a nave e começa a explorar Kryos.
+
+Não existe caminho evidente para casa.
+
+O jogador precisa atravessar uma região natural em busca de uma
+estrutura observada à distância.
+
+Durante a exploração, começa a encontrar evidências de criaturas
+gigantes.
+
+\subsubsection*{Introdução}
+
+A fase começa imediatamente após a saída da nave.
+
+O jogador vê:
+
+\begin{itemize}
+    \item montanhas;
+    \item árvores;
+    \item grandes luas;
+    \item rios;
+    \item estruturas artificiais ao longe.
+\end{itemize}
+
+Objetivo:
+
+\begin{center}
+\textbf{Encontre uma forma de pedir ajuda.}
+\end{center}
+
+\subsubsection*{Objetivos}
+
+\begin{enumerate}
+    \item Descer da região da nave.
+    \item Seguir sinais de uma instalação.
+    \item Atravessar a floresta.
+    \item Investigar pegadas.
+    \item Encontrar abrigo.
+    \item Atravessar um rio ou vale.
+    \item Alcançar uma estrutura.
+    \item Encontrar o primeiro dinossauro.
+\end{enumerate}
+
+\subsubsection*{Eventos}
+
+Primeiro, o jogador encontra uma pegada.
+
+Depois escuta um rugido.
+
+Mais tarde vê árvores se movimentando.
+
+Uma grande sombra passa ao longe.
+
+Somente depois disso ocorre a revelação.
+
+Uma criatura aparece.
+
+Ela possui roupas, equipamentos e tecnologia.
+
+Alex percebe que é um dinossauro inteligente.
+
+\subsubsection*{Mecânicas}
+
+\begin{itemize}
+    \item exploração de terreno;
+    \item água;
+    \item terreno irregular;
+    \item checkpoints;
+    \item coleta;
+    \item áreas de perigo;
+    \item partículas ambientais;
+    \item eventos ativados por Trigger.
+\end{itemize}
+
+\subsubsection*{Ambiente}
+
+O terreno deve utilizar:
+
+\begin{itemize}
+    \item grama;
+    \item terra;
+    \item areia;
+    \item cascalho;
+    \item pedra;
+    \item água;
+    \item árvores;
+    \item arbustos;
+    \item morros;
+    \item vales.
+\end{itemize}
+
+\subsubsection*{Meta de distribuição de assets -- planejamento}
+
+Os números abaixo são metas de modelos visuais distintos para o
+nível futuro, não um inventário de assets importados ou posicionados.
+Repetições, mudanças de material e texturas isoladas não aumentam
+essa contagem. A distribuição precisa ser comprovada na implementação.
+
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|c|}
+\hline
+Vegetação & 24\\
+\hline
+Pedras e formações naturais & 15\\
+\hline
+Estruturas de trilha e passagem & 8\\
+\hline
+Ruínas e estruturas & 10\\
+\hline
+Objetos tecnológicos & 7\\
+\hline
+Elementos de fauna & 5\\
+\hline
+Elementos especiais & 5\\
+\hline
+\textbf{Total previsto} & \textbf{74}\\
+\hline
+\end{tabularx}
+\end{center}
+
+% =========================================================
+% FASE 3
+% =========================================================
+
+\subsection{Nível 3 -- O Laboratório}
+
+\textbf{Status: planejado, não implementado na versão atual.}
+
+
+\subsubsection*{Sinopse}
+
+Alex é capturado novamente.
+
+Quando acorda, está dentro de um centro de pesquisa.
+
+Ali descobre que não é o primeiro humano levado para Kryos.
+
+A fase é focada em furtividade.
+
+\subsubsection*{Objetivos}
+
+\begin{enumerate}
+    \item Escapar da cela.
+    \item Evitar os guardas.
+    \item Encontrar o centro de segurança.
+    \item Desativar câmeras.
+    \item Encontrar registros.
+    \item Descobrir o propósito dos sequestros.
+    \item Libertar outros prisioneiros, opcionalmente.
+    \item Encontrar uma rota de fuga.
+\end{enumerate}
+
+\subsubsection*{Mecânica principal}
+
+A principal regra é:
+
+\begin{center}
+\textbf{NÃO SEJA VISTO.}
+\end{center}
+
+NPCs utilizam NavMesh para patrulhar corredores.
+
+Cada inimigo possui:
+
+\begin{itemize}
+    \item rota de patrulha;
+    \item campo de visão;
+    \item estado de suspeita;
+    \item estado de perseguição;
+    \item retorno à patrulha.
+\end{itemize}
+
+\subsubsection*{Estados da IA}
+
+\begin{center}
+Patrulha
+$\rightarrow$
+Suspeita
+$\rightarrow$
+Alerta
+$\rightarrow$
+Perseguição.
+\end{center}
+
+Se o jogador escapar:
+
+\begin{center}
+Perseguição
+$\rightarrow$
+Busca
+$\rightarrow$
+Patrulha.
+\end{center}
+
+\subsubsection*{Descoberta narrativa}
+
+Alex acessa um terminal.
+
+O sistema apresenta arquivos sobre:
+
+\begin{itemize}
+    \item anatomia humana;
+    \item atmosfera da Terra;
+    \item doenças;
+    \item cidades;
+    \item tecnologia;
+    \item armas;
+    \item comportamento humano.
+\end{itemize}
+
+Alex percebe que os dinossauros estudam a Terra há muito tempo.
+
+\subsubsection*{Meta de distribuição de assets -- planejamento}
+
+Os números abaixo são metas de modelos visuais distintos para o
+nível futuro, não um inventário de assets importados ou posicionados.
+Repetições, mudanças de material e texturas isoladas não aumentam
+essa contagem. A distribuição precisa ser comprovada na implementação.
+
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|c|}
+\hline
+Arquitetura de laboratório & 18\\
+\hline
+Equipamentos científicos & 18\\
+\hline
+Computadores e terminais & 10\\
+\hline
+Câmaras e sistemas de contenção & 8\\
+\hline
+Objetos médicos & 7\\
+\hline
+Câmeras e segurança & 6\\
+\hline
+NPCs e elementos especiais & 6\\
+\hline
+\textbf{Total previsto} & \textbf{73}\\
+\hline
+\end{tabularx}
+\end{center}
+
+% =========================================================
+% FASE 4
+% =========================================================
+
+\subsection{Nível 4 -- Os Rebeldes}
+
+\textbf{Status: planejado, não implementado na versão atual.}
+
+
+\subsubsection*{Sinopse}
+
+Alex encontra uma pequena nave e tenta fugir.
+
+O veículo é detectado e atacado.
+
+Após a queda, Alex acorda em outra região de Kryos.
+
+Um grupo de dinossauros o encontra.
+
+Alex acredita inicialmente que será capturado novamente.
+
+Porém, eles o ajudam.
+
+São rebeldes contrários ao Projeto Retorno.
+
+\subsubsection*{Objetivos}
+
+\begin{enumerate}
+    \item Sobreviver à queda.
+    \item Explorar os destroços.
+    \item Encontrar suprimentos.
+    \item Seguir os rebeldes.
+    \item Conhecer Tala.
+    \item Descobrir a verdadeira situação de Kryos.
+    \item Recuperar componentes.
+    \item Ativar uma antiga estação.
+    \item Preparar uma nova rota para a Terra.
+\end{enumerate}
+
+\subsubsection*{Grande revelação}
+
+Tala mostra registros históricos.
+
+Os ancestrais da população de Kryos viviam na Terra.
+
+Quando detectaram o evento de extinção, uma pequena parte da
+civilização conseguiu fugir.
+
+Milhões de anos depois, seus descendentes estão tentando retornar ao
+planeta de origem.
+
+\subsubsection*{Conflito}
+
+O governo acredita que possui direito histórico sobre a Terra.
+
+Os rebeldes argumentam que a humanidade é agora a civilização
+dominante do planeta e que um retorno militar criaria uma guerra
+desnecessária.
+
+\subsubsection*{Gameplay}
+
+A fase combina:
+
+\begin{itemize}
+    \item exploração;
+    \item diálogos;
+    \item NPCs amigáveis;
+    \item pequenos combates;
+    \item recuperação de componentes;
+    \item perseguição;
+    \item utilização de NavMesh.
+\end{itemize}
+
+\subsubsection*{Meta de distribuição de assets -- planejamento}
+
+Os números abaixo são metas de modelos visuais distintos para o
+nível futuro, não um inventário de assets importados ou posicionados.
+Repetições, mudanças de material e texturas isoladas não aumentam
+essa contagem. A distribuição precisa ser comprovada na implementação.
+
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|c|}
+\hline
+Natureza e vegetação & 20\\
+\hline
+Elementos de acampamento & 15\\
+\hline
+Destroços & 12\\
+\hline
+Equipamentos tecnológicos & 10\\
+\hline
+Ferramentas e equipamentos & 6\\
+\hline
+NPCs & 5\\
+\hline
+Objetos narrativos & 5\\
+\hline
+\textbf{Total previsto} & \textbf{73}\\
+\hline
+\end{tabularx}
+\end{center}
+
+% =========================================================
+% FASE 5
+% =========================================================
+
+\subsection{Nível 5 -- Retorno à Terra}
+
+\textbf{Status: planejado, não implementado na versão atual.}
+
+
+\subsubsection*{Sinopse}
+
+Alex consegue retornar à Terra.
+
+Entretanto, naves de Kryos já começaram a aparecer.
+
+A humanidade interpreta a aproximação como uma invasão.
+
+Forças humanas e tropas de Rhaz entram em conflito.
+
+O jogador precisa atravessar uma cidade parcialmente destruída para
+chegar a um centro de comunicação.
+
+\subsubsection*{Objetivos}
+
+\begin{enumerate}
+    \item Sair do local da queda.
+    \item Atravessar a região urbana.
+    \item Evitar ou enfrentar inimigos.
+    \item Encontrar integrantes rebeldes.
+    \item Recuperar dados sobre o Projeto Retorno.
+    \item Chegar ao centro de transmissão.
+    \item Enviar uma mensagem para ambos os lados.
+    \item Confrontar Rhaz.
+    \item Impedir o ataque principal.
+\end{enumerate}
+
+\subsubsection*{Gameplay}
+
+É a fase mais orientada à ação.
+
+O jogador utiliza:
+
+\begin{itemize}
+    \item cobertura;
+    \item movimentação;
+    \item arma simples;
+    \item interação;
+    \item NPCs;
+    \item objetivos;
+    \item checkpoints.
+\end{itemize}
+
+O combate continua sendo relativamente simples.
+
+\subsubsection*{Objetivo final}
+
+Alex precisa chegar a uma torre de comunicação.
+
+Lá, utiliza os registros encontrados durante a campanha para transmitir
+informações para humanos e dinossauros.
+
+Os dados provam:
+
+\begin{itemize}
+    \item que Kryos realmente está morrendo;
+    \item que existem grupos favoráveis à coexistência;
+    \item que a invasão foi organizada apenas por uma parcela do governo;
+    \item que uma negociação ainda é possível.
+\end{itemize}
+
+\subsubsection*{Final}
+
+A frota interrompe temporariamente o ataque.
+
+Rhaz é obrigado a negociar.
+
+O jogo não mostra imediatamente a solução do conflito.
+
+A cena final apresenta humanos e dinossauros iniciando o primeiro
+contato diplomático oficial.
+
+Alex observa enquanto representantes das duas espécies se aproximam.
+
+A última frase é:
+
+\begin{quote}
+``Durante milhões de anos, acreditamos que pertencíamos a mundos
+diferentes. Talvez estivéssemos apenas tentando encontrar o mesmo
+lugar para chamar de lar.''
+\end{quote}
+
+A tela escurece.
+
+\begin{center}
+\textbf{FIM}
+\end{center}
+
+\subsubsection*{Meta de distribuição de assets -- planejamento}
+
+Os números abaixo são metas de modelos visuais distintos para o
+nível futuro, não um inventário de assets importados ou posicionados.
+Repetições, mudanças de material e texturas isoladas não aumentam
+essa contagem. A distribuição precisa ser comprovada na implementação.
+
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|X|c|}
+\hline
+Prédios e estruturas urbanas & 20\\
+\hline
+Objetos urbanos & 15\\
+\hline
+Destroços & 10\\
+\hline
+Veículos & 8\\
+\hline
+Barricadas e equipamentos & 7\\
+\hline
+Personagens e NPCs & 6\\
+\hline
+Objetos tecnológicos & 7\\
+\hline
+\textbf{Total previsto} & \textbf{73}\\
+\hline
+\end{tabularx}
+\end{center}
+
+% =========================================================
+% TUTORIAL
+% =========================================================
+
+\subsection{Níveis de treinamento}
+
+Não há cena separada de tutorial. O desafio inicial da caixa apresenta
+interação, mira, impulso e tentativa/erro dentro da própria contenção.
+
+O HUD mostra o objetivo e as ações contextuais quando o jogador mira
+em um objeto. Os menus oferecem o painel de controles. Não há, nesta
+versão, uma sequência adicional de popups temporizados ensinando cada
+tecla de movimentação.
+
+O tutorial atual deve ser apresentado como parte do Nível 1, sem
+declarar mensagens ou sistemas de ajuda ainda não implementados.
+
+
+
+\section{Interface}
+
+\subsection{Sistema visual}
+
+A interface segue o sistema tradicional de UI da Unity, com
+GameObject Canvas, Panel, Button, Text e eventos OnClick conectados
+a scripts. Não utiliza UI Toolkit ou interface externa.
+
+O Canvas usa \textit{Screen Space -- Overlay}; o Canvas Scaler usa
+\textit{Scale With Screen Size}, com referência de 1920$\times$1080.
+O estilo é futurista, com fundo escuro, detalhes azul/ciano e textos
+claros. Há um EventSystem por cena de jogo/menu, usando o novo
+Input System.
+
+\subsubsection*{HUD de gameplay}
+
+\begin{itemize}
+\item Objetivo atual no canto superior esquerdo.
+\item Mira pequena no centro da tela.
+\item Ação contextual na parte inferior central.
+\item Mensagens temporárias para coleta, instalação, adoção e ativações.
+\item Progresso dos terminais, de 0/3 a 3/3.
+\end{itemize}
+
+Não há barra de vida, inventário visual ou indicador de detecção.
+O HUD de gameplay é ocultado durante a pausa para não disputar
+espaço com os menus.
+
+\subsubsection*{Menu Principal}
+
+A cena \texttt{MainMenu.unity} apresenta:
+
+\begin{itemize}
+\item Título: ECOS DO CRETÁCEO.
+\item Subtítulo: PROJETO RETORNO.
+\item Novo Jogo: inicia o Nível 1 com os estados zerados.
+\item Controles: abre o painel dos comandos.
+\item Sair: encerra a aplicação na build.
+\end{itemize}
+
+Não há botão de carregar save ou menu de opções na versão atual.
+
+\subsubsection*{Menu de Pausa}
+
+ESC abre ou fecha o painel sobre o cenário. O jogo usa
+\texttt{Time.timeScale = 0}, mostra o cursor e bloqueia movimento,
+câmera, interação e arremesso. O áudio de gameplay e as partículas
+também pausam. A interface continua respondendo aos cliques.
+
+Os botões são:
+
+\begin{enumerate}
+\item Continuar.
+\item Controles.
+\item Reiniciar Nível.
+\item Menu Principal.
+\item Sair.
+\end{enumerate}
+
+Reiniciar recarrega a cena atual. Trocar de cena restaura o tempo
+normal. No Editor, Sair encerra o modo Play; na build, encerra
+a aplicação.
+
+\subsubsection*{Tela de conclusão}
+
+Mostra o título NÍVEL 1 CONCLUÍDO, a confirmação da fuga e
+o botão Voltar ao Menu Principal. Não oferece continuidade para
+um Nível 2 ainda não implementado.
+
+\subsection{Sistema de controle}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{4.3cm}|X|}
+\hline
+\textbf{Comando} & \textbf{Ação implementada}\\
+\hline
+W / A / S / D & Movimentação.\\
+\hline
+Mouse & Controlar câmera.\\
+\hline
+Espaço & Pular quando não estiver agachado.\\
+\hline
+Shift esquerdo & Correr.\\
+\hline
+Ctrl esquerdo ou direito, segurado & Agachar.\\
+\hline
+F & Interagir, coletar, usar painéis, pegar a primeira caixa e adotar o Sparrow.\\
+\hline
+Botão esquerdo do mouse & Arremessar uma caixa enquanto o desafio inicial estiver ativo.\\
+\hline
+ESC & Pausar / continuar.\\
+\hline
+\end{tabularx}
+\end{center}
+
+A tecla C não é um comando alternativo de agachamento.
+O clique esquerdo não ataca ou dispara armas na versão atual.
+
+\subsection{Áudio, música e efeitos sonoros}
+
+Foram localizados 173 AudioClips dos pacotes Kenney Sci-fi Sounds
+e Kenney Interface Sounds. O pacote adicional citado para falas,
+anúncios e ambientes não foi encontrado importado.
+
+Os clipes atualmente utilizados são:
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|p{6.2cm}|X|}
+\hline
+\textbf{Clipe Kenney} & \textbf{Aplicação}\\
+\hline
+\texttt{Kenney\_doorOpen\_000.ogg} & Porta inicial e saída externa.\\
+\hline
+\texttt{Kenney\_doorOpen\_001.ogg} & Porta do laboratório.\\
+\hline
+\texttt{Kenney\_doorOpen\_002.ogg} & Porta do hangar.\\
+\hline
+\texttt{Kenney\_confirmation\_001.ogg} & Instalação bem-sucedida da bateria.\\
+\hline
+\texttt{Kenney\_error\_006.ogg} & Aviso eletrônico da saída externa, repetido por quatro segundos.\\
+\hline
+\texttt{Kenney\_engineCircular\_000.ogg} & Ambiente discreto da sala de energia.\\
+\hline
+\end{tabularx}
+\end{center}
+
+As fontes das portas e do pet são 3D. O som de abertura é disparado
+quando a folha começa a mover, sem repetição por frame. O aviso
+externo é finito, não uma fala ou sirene de um pacote inexistente.
+
+Não há trilha musical implementada. A alternância entre músicas de
+exploração, tensão e perseguição permanece como ideia para fases futuras.
+
+\subsubsection*{Passos e cantos: sistemas preparados}
+
+\texttt{PlayerFootstepAudio} lê velocidade real e contato com o chão.
+A corrida aumenta a frequência; parado ou no ar não gera passos.
+Pode variar pitch e escolher clipes sem repetição imediata.
+
+\texttt{CompanionChirps} só agenda cantos após a adoção, em intervalos
+aleatórios de 8 a 20 segundos, com volume discreto e fonte no pássaro.
+
+\textbf{Os arrays estão vazios por falta de áudios adequados.}
+Esses sons ainda não são ouvidos no jogo. Atribuir clipes reais no
+Inspector completa a configuração, sem usar efeitos eletrônicos
+como substitutos de passos ou cantos.
+
+\subsection{Sistema de ajuda}
+
+O objetivo orienta a progressão e a mensagem de interação descreve
+a ação disponível. O painel Controles funciona no Menu Principal
+e na pausa e possui botão Voltar.
+
+Mensagens de requisito informam quando faltam bateria ou cartão.
+As confirmações desaparecem após alguns segundos. Não há guia
+por setas, marcador de missão no mundo ou diálogo de ajuda.
+
+
+
+\section{Inteligência Artificial}
+
+\subsection{Comportamento implementado do companheiro}
+
+O Sparrow usa um comportamento simples e independente da progressão
+dos puzzles. Antes da adoção, permanece no ponto de espera, com
+variações periódicas de repouso. Depois de F, acompanha um alvo
+lateral próximo ao jogador.
+
+O movimento utiliza interpolação, verificação de obstáculos e
+recuperação segura por distância ou bloqueio. Não existe patrulha,
+combate, coleta de itens, navegação por NavMesh ou tomada de decisões
+complexa no pet.
+
+O pássaro pausa com o jogo, não bloqueia portas e não ativa os
+triggers de conclusão. Seus clipes reais são controlados pelo
+Animator original do pacote.
+
+\subsection{IA oponente e inimiga -- planejamento}
+
+A campanha prevê inimigos nos níveis posteriores, com máquina de
+estados simples: repouso, patrulha, suspeita, alerta, perseguição,
+busca e retorno.
+
+O planejamento inclui pontos de patrulha, distância e campo de
+visão, Raycast para verificar obstáculos e navegação por NavMesh.
+Esses sistemas não estão implementados no Nível 1 e não devem ser
+apresentados como uma funcionalidade atual das câmeras decorativas.
+
+\subsection{NPCs amigáveis -- planejamento}
+
+Tala e os rebeldes deverão participar dos níveis 4 e 5. Conversas,
+acompanhamento narrativo, objetivos fornecidos por NPCs e navegação
+por NavMesh são previstos para a campanha, não para o pet atual.
+
+\subsection{Sistemas de suporte}
+
+Na versão atual são utilizados Raycasts, Layers, colliders, triggers,
+referências de componentes e interpolação. NavMesh e NavMesh Agent
+continuam previstos para etapas futuras. O acompanhamento do
+Sparrow não comprova a implementação desses dois recursos.
+
+
+
+\section{Técnico}
+
+\subsection{Hardware alvo}
+
+A plataforma principal é Windows, com teclado e mouse. O objetivo
+de apresentação é funcionar em computadores comuns do laboratório.
+
+A referência de planejamento é Windows 10 ou superior, processador
+Core i5 ou equivalente, 8 GB de RAM, GPU compatível com DirectX 11
+e resolução a partir de 1280$\times$720. Esses valores não constituem
+uma especificação mínima validada por testes de desempenho.
+
+\subsection{Hardware e software de desenvolvimento}
+
+\subsubsection*{Engine e renderização}
+
+O projeto atual usa \textbf{Unity 6, versão 6000.0.81f1},
+\textbf{Universal Render Pipeline (URP)}, C\# e o novo Input System.
+
+O enunciado fornecido cita a versão \textbf{6000.0.8f1} do laboratório.
+As versões não são idênticas. A compatibilidade e a versão aceita
+para a apresentação precisam ser conferidas no laboratório; não
+foi realizado downgrade ou alterada configuração global para esta
+revisão do GDD.
+
+\subsubsection*{Ferramentas}
+
+São utilizados Unity Editor e código C\#, com assets importados e
+ferramentas próprias de integração. Git/GitHub, Blender, editores
+de áudio/imagem e outras ferramentas podem apoiar a equipe.
+A existência de um asset em planejamento não comprova sua importação.
+
+\subsubsection*{Cenas e fluxo}
+
+\begin{itemize}
+\item \texttt{Assets/Scenes/MainMenu.unity}: entrada da aplicação.
+\item \texttt{Assets/Scenes/Level01\_Nave\_Expanded.unity}: versão jogável.
+\item \texttt{Assets/Scenes/Level01\_Nave.unity}: referência original.
+\end{itemize}
+
+A Scene List mantém MainMenu primeiro. Novo Jogo carrega a nave
+expandida; Reiniciar recarrega a cena atual. Não há progresso
+persistente entre essas recargas.
+
+\subsubsection*{Arquitetura dos scripts implementados}
+
+O código é separado em \texttt{Runtime} e \texttt{Editor}.
+Os nomes abaixo correspondem aos arquivos reais, não a classes
+genéricas apenas planejadas.
+
+\small
+\begin{longtable}{|p{6.3cm}|p{8.7cm}|}
+\hline
+\textbf{Script ou grupo} & \textbf{Responsabilidade}\\
+\hline
+\endfirsthead
+\hline
+\textbf{Script ou grupo} & \textbf{Responsabilidade}\\
+\hline
+\endhead
+\texttt{NaveWalkthroughController} & Movimento, câmera, gravidade, salto, corrida e agachamento existentes.\\
+\hline
+\texttt{PlayerInteraction} e \texttt{IInteractable} & Raycast, mensagem contextual e execução da interação F.\\
+\hline
+\texttt{Level01GameManager} & Estado único de bateria, energia, cartão, terminais, objetivos e conclusão.\\
+\hline
+\texttt{Level01Interactable} & Configuração comum para coleta, painel, leitor e terminais.\\
+\hline
+\texttt{DoorController} & Folha móvel, collider sólido, Translate e evento de início de abertura.\\
+\hline
+\texttt{ObjectiveHUD} & Objetivos, mira, mensagens, contador e tela final.\\
+\hline
+\texttt{LevelCompleteTrigger} & Presença da cápsula do jogador na saída, condicionada pelo gerente.\\
+\hline
+\texttt{CardSpawnSystem} & Sorteio do único cartão entre pontos válidos do laboratório.\\
+\hline
+\texttt{LaboratoryEntryTrigger} & Atualiza o objetivo ao entrar no laboratório.\\
+\hline
+\texttt{IntroThrowingSystem} & HoldPoint, array de prefabs, spawn por função, cooldown e desafio inicial.\\
+\hline
+\texttt{ThrownObject} & Rigidbody, impulso, torque, colisão contínua e vida útil da caixa.\\
+\hline
+\texttt{ThrowablePickup} e \texttt{ImpactButton} & Primeira coleta e validação do impacto no alvo.\\
+\hline
+\texttt{PetFollower} & Espera, adoção por IInteractable e acompanhamento seguro do Sparrow.\\
+\hline
+\texttt{SparrowAnimationController} & Idles aleatórios e transição para o Fly existente.\\
+\hline
+\texttt{CompanionChirps} & Cantos ocasionais após adoção, preparado sem clipes.\\
+\hline
+\texttt{PlayerFootstepAudio} & Cadência por movimento/chão, preparado sem clipes.\\
+\hline
+\texttt{PauseAwareAudio} & Pausa e retomada da fonte local de gameplay.\\
+\hline
+\texttt{DoorPresentation} & Som 3D, vapor e alerta finito, usando a abertura existente.\\
+\hline
+\texttt{EnergyActivationVFX} & Energia ciano e confirmação após instalação real da bateria.\\
+\hline
+\texttt{MainMenuController}, \texttt{PauseMenuController}, \texttt{ControlsPanelController}, \texttt{MenuSceneActions}
+& Botões, controles, pausa e navegação entre cenas.\\
+\hline
+\texttt{NaveWorldLabel} & Atualização da fonte nas placas 3D do cenário.\\
+\hline
+\end{longtable}
+\normalsize
+
+O gerador \texttt{Level01NaveGenerator} mantém partes para estrutura,
+decoração e validação. As ferramentas \texttt{Level01GameplaySetup},
+\texttt{Level01AdjustmentsSetup} e \texttt{Level01PolishSetup}
+integram gameplay e apresentação de modo organizado.
+
+A integração de polimento pode ser reaplicada sem reconstruir a
+nave. O gerador chama essas integrações em futuras reconstruções,
+mas gerar novamente o mapa ainda pode substituir edições manuais.
+Os ajustes recentes preservaram o layout existente e suas referências.
+
+\subsubsection*{Organização dos arquivos}
+
+\begin{itemize}
+\item \texttt{Assets/Scripts/Runtime}: código usado pelo jogo.
+\item \texttt{Assets/Scripts/Editor}: montagem, auditorias e testes.
+\item \texttt{Assets/Scenes}: cenas e backups.
+\item \texttt{Assets/Prefabs/Gameplay/Level01}: bateria, cartão e caixas locais.
+\item \texttt{Assets/Audio/SFX}: Footsteps, Doors, Interactions, Alarms e Bird.
+\item \texttt{Assets/Audio/Ambient}, \texttt{Music} e \texttt{Libraries}: ambiente, espaço para música e bibliotecas Kenney.
+\item \texttt{Assets/VFX}: Particles, Materials e Prefabs.
+\item \texttt{Docs}: referências, guias, inventários, testes e prévias.
+\end{itemize}
+
+Áudios foram organizados por \texttt{AssetDatabase.MoveAsset},
+preservando metadados e GUIDs. Prefabs visuais dos fornecedores
+foram reutilizados com referências reais. Adaptações de materiais
+ficam em cópias locais compatíveis com URP.
+
+\subsubsection*{Documentação das funções}
+
+As funções C\# devem explicar finalidade, argumentos, retorno e
+processamento. O código da equipe é mantido por responsabilidade,
+para permitir estudo e apresentação pelos três integrantes.
+
+\subsection{Requisitos acadêmicos e situação da entrega parcial}
+
+O enunciado exige cinco níveis, com pelo menos 70 assets de
+categorias diferentes por nível, e determina que o primeiro
+bimestre implemente somente o Nível 1. Este GDD mantém os demais
+níveis como planejamento.
+
+\paragraph{Tema escolhido para a primeira etapa: Tecnologia}
+
+O Nível 1 evidencia tecnologia por pelo menos cinco elementos
+identificáveis: célula de energia, painel de instalação, leitor de
+cartão, terminais de controle, portas automatizadas e câmeras de
+vigilância decorativas. A função de cada elemento é descrita,
+sem transformar repetições em novos modelos para a contagem de assets.
+
+\paragraph{Demonstração técnica atual}
+
+\small
+\begin{longtable}{|p{6.3cm}|p{8.7cm}|}
+\hline
+\textbf{Critério citado no enunciado} & \textbf{Evidência e limite}\\
+\hline
+\endfirsthead
+\hline
+\textbf{Critério} & \textbf{Evidência e limite}\\
+\hline
+\endhead
+Movimento e colisão & CharacterController, gravidade, corrida, salto, agachamento e sólidos da nave.\\
+\hline
+Translate & Abertura da folha móvel das portas.\\
+\hline
+AddForce, rotação e torque & Lançamento de caixa com impulso e AddTorque; câmera e personagem também giram.\\
+\hline
+Vetor de prefabs e escolha aleatória & Array de dois prefabs de caixas, selecionado por Random.Range.\\
+\hline
+Spawn por função & Instantiate na função de reposição das caixas; limite de projéteis e remoção por tempo.\\
+\hline
+Randomização de posição & Cartão único sorteado entre três apoios válidos no laboratório.\\
+\hline
+UI com texto, botão e reinício & Canvas nativo, HUD, menus, controles e Reiniciar Nível.\\
+\hline
+Som & Portas, confirmação da bateria, alerta externo e ambiente. Passos/cantos ainda sem clipes.\\
+\hline
+Partículas e fumaça/vapor & VFX ciano e vapor nativo nas portas. Não há explosão ou pedrinhas; confirmar a abrangência dos exemplos exigidos.\\
+\hline
+Animação & Pet com Idle\_A/B/C e Fly reais. Isso não comprova os estados parado, andando, correndo, pulando e caindo do personagem principal.\\
+\hline
+Tag & MainCamera configurada na câmera. Gameplay identifica interativos por componentes e Layers; não há Tags específicas de cartões ou inimigos. Conferir a demonstração esperada de Tag.\\
+\hline
+70 assets no Nível 1 & Catálogo-base formal com 82 modelos distintos; conferir inventário da cena final.\\
+\hline
+Scripts documentados & Funções com finalidade, entradas, retorno e processamento; código organizado para apresentação do grupo.\\
+\hline
+\end{longtable}
+\normalsize
+
+\paragraph{Pontos a validar, sem declarar cumprimento automático}
+
+\begin{itemize}
+\item Compatibilidade da versão instalada com a versão do laboratório.
+\item Uso permitido de assets externos, conforme orientação do professor.
+\item Cobertura dos estados de animação pedidos para o personagem;
+movimentar a câmera ou animar o pet não substitui essa comprovação.
+\item Abrangência dos exemplos de partículas e da utilização de Tag.
+\item Inventário atualizado dos modelos da cena entregue.
+\item Participação de cada integrante, avaliada proporcionalmente
+pelo professor; este documento não atribui atividades não registradas.
+\end{itemize}
+
+\subsection{Planejamento do segundo bimestre}
+
+O enunciado prevê a campanha completa, com cinco níveis,
+NPCs, NavMesh, melhores animações, partículas criadas pelo grupo,
+iluminação e pós-processamento.
+
+Também descreve terreno modelado pela equipe e texturizado com
+pelo menos dez layers, com elementos como morros, vales, água,
+ravinas, areia, cascalho, grama, vegetação, árvores e caminhos.
+Esses itens são planejamento de fases externas, não conteúdo
+atual da nave.
+
+O texto apresenta uma divergência sobre o tema: nos critérios do
+segundo bimestre menciona três elementos de cada eixo; na descrição
+geral reaparece o mínimo de cinco. A referência de planejamento
+é cinco elementos por eixo, sujeita à confirmação do professor.
+Ecorenovação e Skills ainda precisam de uma distribuição explícita
+nos níveis futuros; não se declara que o simples uso de vegetação
+ou tecnologia já comprova esses eixos.
+
+Para a entrega são previstos GDD detalhado, arquivos completos
+do projeto e apresentação no laboratório. O vídeo de 1 a 3 minutos,
+com link, é indicado no enunciado somente para o segundo bimestre.
+Essas exigências documentais não foram executadas automaticamente
+por esta revisão do GDD.
+
+\subsection{Validação registrada}
+
+Os relatórios existentes registram compilação e execução na Unity
+6000.0.81f1, progressão completa aprovada com 849 movimentos físicos
+da cápsula e regressão dos menus aprovada em 21/10/2026.
+
+Foram verificados portas fechadas, tetos nos nove setores,
+Raycasts, estados negativos dos puzzles, sorteio do cartão,
+adoção, voo, áudio, partículas, pausa, reinício e conclusão.
+
+A auditoria de polimento comparou 1.434 renderizadores do cenário
+ao backup e confirmou preservação de posição, rotação e escala.
+O reposicionamento do pet para esperar no corredor foi intencional.
+Isso não é uma contagem de modelos distintos.
+
+Os 173 AudioClips tiveram GUIDs preservados. Reaplicar a integração
+não acrescentou colisores auxiliares. Nenhum MeshCollider ou
+Rigidbody novo foi adicionado à decoração nessa revisão.
+
+Esses resultados são de testes no Editor. Não substituem teste no
+laboratório, revisão auditiva humana ou validação de uma build
+standalone, ainda não gerada nessa etapa.
+
+\subsection{Requerimentos de rede}
+
+O jogo é single-player e não utiliza servidor, multiplayer,
+contas ou sincronização de progresso pela internet.
+
+
+
+\section{Arte do Jogo}
+
+\subsection*{Direção artística atual e planejada}
+
+O Nível 1 utiliza uma direção sci-fi estilizada, modular e industrial,
+com materiais metálicos, painéis, iluminação fria e detalhes ciano.
+Assets de pacotes diferentes são combinados buscando coerência
+visual e proporções adequadas à navegação humana.
+
+Modelos e materiais originais dos fornecedores são preservados.
+Quando necessária, a compatibilidade com URP é obtida por cópias
+locais de materiais. Não se declara um estilo semi-realista completo
+ou a produção própria de todos os modelos.
+
+Para a campanha, continuam previstas três identidades:
+a tecnologia de Kryos, os ambientes naturais do planeta e a região
+urbana da Terra. Vegetação, terreno, água, ruínas externas, cidades
+e dinossauros equipados pertencem ao planejamento dos níveis futuros,
+não à comprovação do cenário atual.
+
+\subsection*{Arquitetura e composição da nave}
+
+A nave mantém salas conectadas, pisos contínuos, portas amplas e
+corredores legíveis. Laboratório, depósito, energia, segurança,
+hangar, máquinas e manutenção têm conjuntos de objetos e funções
+distintos. A decoração não deve obstruir as rotas obrigatórias.
+
+Computadores, mesas, caixas, contêineres, tubulações, estruturas
+industriais, luminárias e câmeras formam a base visual.
+O hangar possui uma saída com luz branca, sem planeta explorável
+ou cenário exterior completo nesta etapa.
+
+\subsection*{Sparrow e animações reais}
+
+O pet reutiliza o prefab Sparrow -- Quirky Series, da Omabuarts
+Studio, seu Animator Controller \texttt{AC\_Sparrow}, suas malhas e
+seu atlas original, com material local compatível com URP.
+
+As animações utilizadas são:
+
+\begin{itemize}
+\item \texttt{Idle\_A}, \texttt{Idle\_B} e \texttt{Idle\_C}: repouso
+no chão antes da adoção, alternado em intervalos de 3 a 7 segundos.
+\item \texttt{Fly}: voo após a adoção, com transição suave e sem
+interrupções por poses terrestres.
+\end{itemize}
+
+O pacote também contém estados como Walk, Run e Sit, que não
+são apresentados como usados pelo comportamento atual.
+Existe um único clipe Fly utilizado; não é inventada uma coleção
+de variações de voo.
+
+As animações do companheiro não são equivalentes à implementação
+das animações exigidas para o protagonista. Estados de personagem
+humano, dano, morte, conversa e combate permanecem futuros.
+
+\IfFileExists{Figuras/sparrow_companheiro.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=.95\textwidth]{Figuras/sparrow_companheiro.png}
+\caption{Sparrow adotado acompanhando o jogador no corredor. Captura real da versão atual.}
+\end{figure}
+}{}
+
+\subsection*{Partículas implementadas}
+
+São usados Particle Systems nativos e materiais
+\texttt{Universal Render Pipeline/Particles/Unlit}, com máscara
+suave local e sem plugins externos.
+
+\begin{itemize}
+\item \texttt{VFX\_EnergyActivation}: pequenas partículas ciano à
+frente do painel durante a restauração da energia, por cerca de
+2 a 3 segundos.
+\item \texttt{VFX\_DoorSteam}: vapor branco/cinza nas laterais das
+quatro portas importantes, com descarga curta de aproximadamente
+1 a 2 segundos.
+\end{itemize}
+
+Os prefabs são reutilizáveis, não têm colisores nem loop infinito.
+A emissão é limitada e pausa com o jogo. O vapor não cobre toda a
+passagem e a energia não é uma explosão.
+
+Fogo, chuva, destroços, pedrinhas e explosões ainda não foram
+implementados como efeitos da fase atual.
+
+\IfFileExists{Figuras/energia_ativacao.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=.95\textwidth]{Figuras/energia_ativacao.png}
+\caption{Partículas ciano na instalação da bateria, com objetivo e confirmação no HUD.}
+\end{figure}
+}{}
+\IfFileExists{Figuras/vapor_porta.png}{
+\begin{figure}[H]
+\centering
+\includegraphics[width=.95\textwidth]{Figuras/vapor_porta.png}
+\caption{Descarga breve de vapor nas laterais da porta do laboratório durante a abertura.}
+\end{figure}
+}{}
+
+\subsection*{Iluminação}
+
+A iluminação da nave é compatível com URP e prioriza visibilidade
+do percurso, tons frios e destaques tecnológicos, sem adição
+desnecessária de sombras e luzes dinâmicas.
+
+A luz branca da saída é formada por superfície local URP e luz
+suave, ativadas somente depois dos três terminais. Não depende
+de instalar Bloom ou um pacote de efeitos.
+
+\begin{center}
+\begin{tabularx}{\textwidth}{|c|X|}
+\hline
+\textbf{Nível} & \textbf{Sensação e situação}\\
+\hline
+1 & Fria, artificial e tecnológica; implementada na nave.\\
+\hline
+2 & Natural, ampla e desconhecida; planejada.\\
+\hline
+3 & Clínica, controlada e ameaçadora; planejada.\\
+\hline
+4 & Natural e acolhedora com áreas destruídas; planejada.\\
+\hline
+5 & Urbana e marcada pelo conflito; planejada.\\
+\hline
+\end{tabularx}
+\end{center}
+
+\subsection*{Evolução visual prevista}
+
+Terrenos, vegetação, água, elementos urbanos, personagens
+dinossauros e efeitos adicionais deverão ser selecionados ou
+produzidos para os próximos níveis. Sua disponibilidade e adequação
+serão conferidas em Assets, sem declarar pacotes apenas adquiridos
+como já importados.
+
+Qualidade visual, legibilidade, desempenho e possibilidade de
+edição manual orientam as próximas decisões de arte.
+
+
+
+\section*{Conclusão}
+
+\addcontentsline{toc}{section}{Conclusão}
+
+\jogo{} mantém a proposta de aventura narrativa em cinco níveis,
+com mistério e revelações graduais sobre Kryos, a Terra e a
+civilização dos dinossauros.
+
+A entrega implementada concentra-se no Nível 1: sair da contenção
+por um desafio de arremesso, restaurar energia, encontrar o cartão,
+liberar o hangar, ativar três terminais e atravessar a saída iluminada.
+O Sparrow oferece uma interação opcional de companheirismo sem
+aumentar a complexidade dos puzzles.
+
+O jogo atual preserva movimentação e menus, possui HUD, colisões,
+spawn, randomização, áudio disponível, partículas e animações reais
+do pet. As limitações de clipes, animação do protagonista e
+compatibilidade com o laboratório estão registradas.
+
+Os níveis 2 a 5 e seus sistemas narrativos, ambientais e de IA
+continuam como planejamento. O documento diferencia essa intenção
+da implementação existente, permitindo apresentar o trabalho
+acadêmico com evidências e escopo verificável.
+
+
+
+\end{document}
